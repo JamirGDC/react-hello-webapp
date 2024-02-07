@@ -37,6 +37,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				//reset the global store
 				setStore({ demo: demo });
+			},
+
+			createContact: async (full_name, email, agenda_slug, address, phone) => {
+				const store = getStore();
+
+				try {
+					const response = await fetch(`https://playground.4geeks.com/apis/fake/contact/`, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({ full_name, email, agenda_slug, address, phone })
+					});
+
+					const data = await response.json();
+
+					setStore({ ...store, contact: data });
+
+
+				} catch (error) {
+					console.error("Error during create", error);
+				}
 			}
 		}
 	};

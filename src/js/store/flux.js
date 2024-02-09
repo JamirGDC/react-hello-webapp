@@ -12,7 +12,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					background: "white",
 					initial: "white"
 				}
-			]
+			],
+			contacts: [],
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -58,6 +59,50 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				} catch (error) {
 					console.error("Error during create", error);
+				}
+			},
+
+			getContacts: async () => {
+				const store = getStore();
+
+				try {
+					const response = await fetch(` https://playground.4geeks.com/apis/fake/contact/agenda/jamirG`);
+					const data = await response.json();
+					setStore({ ...store, contacts: data });
+				} catch (error) {
+					console.error("Error during get", error);
+				}
+			},
+
+			deleteContact: async (key) => {
+				const store = getStore();
+
+				try {
+					const response = await fetch(`https://playground.4geeks.com/apis/fake/contact/${key}`, {
+						method: 'DELETE',
+					});
+
+					console.log(response);
+				} catch (error) {
+					console.error("Error during delete", error);
+				}
+			},
+
+			editContact: async (id, full_name, agenda_slug, email, address, phone) => {
+				const store = getStore();
+
+				try {
+					const response = await fetch(`https://playground.4geeks.com/apis/fake/contact/${id}`, {
+						method: 'PUT',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({ full_name, email, agenda_slug, address, phone })
+					});
+
+					console.log(response);
+				} catch (error) {
+					console.error("Error during delete", error);
 				}
 			}
 		}
